@@ -1,0 +1,18 @@
+{% schema %}
+{
+  "name": "Sticky Discount Cards",
+  "target": "body",
+  "stylesheet": "sticky-cards.css",
+  "javascript": "sticky-cards.js",
+  "settings": []
+}
+{% endschema %}
+
+<script>
+  window.StickyCardsConfig = {
+    shopDomain: "{{ shop.domain }}",
+    appUrl: "https://{{ shop.metafields.sticky_cards.app_url | default: 'your-app-url.com' }}"
+  };
+</script>
+
+<div id="sticky-cards-root"></div>

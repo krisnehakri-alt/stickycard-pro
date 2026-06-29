@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+model Shop {
+  id            String   @id @default(uuid())
+  shopDomain    String   @unique
+  planName      String   @default("FREE")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  settings      Settings?
+  stickyCards   StickyCard[]
+  analytics     Analytics[]
+}
+
+model Settings {
+  id          String   @id @default(uuid())
+  shopId      String   @unique
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  isEnabled   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StickyCard {
+  id             String           @id @default(uuid())
+  shopId         String
+  shop           Shop             @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  name           String           @default("My Sticky Card")
+  templateId     String           @default("template_1")
+  isActive       Boolean          @default(false)
+  
+  // Display Rules
+  displayPages   String           @default("ALL") // ALL, HOMEPAGE, PRODUCT, COLLECTION, CART
+  triggerRule    String           @default("IMMEDIATE") // IMMEDIATE, DELAY_5, DELAY_10, SCROLL_25, EXIT_INTENT
+  
+  // Customization
+  fontColor      String           @default("#000000")
+  textColor      String           @default("#333333")
+  buttonColor    String           @default("#000000")
+  backgroundColor String          @default("#ffffff")
+  borderColor    String           @default("#e5e5e5")
+  borderRadius   Int              @default(8)
+  shadow         String           @default("SOFT") // SOFT, HARD, NONE
+  animationSpeed String           @default("NORMAL") // SLOW, NORMAL, FAST
+  desktopPosition String          @default("BOTTOM_RIGHT")
+  mobilePosition  String          @default("BOTTOM_CENTER")
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  items          StickyCardItem[]
+}
+
+model StickyCardItem {
+  id           String     @id @default(uuid())
+  stickyCardId String
+  stickyCard   StickyCard @relation(fields: [stickyCardId], references: [id], onDelete: Cascade)
+  order        Int        @default(0)
+  
+  heading      String     @default("Special Offer")
+  description  String?    @default("Don't miss out on this deal")
+  discountText String?    @default("20% OFF")
+  couponCode   String?
+  buttonText   String?    @default("Shop Now")
+  buttonUrl    String?    @default("/collections/all")
+  expiryDate   DateTime?
+  emoji        String?    @default("🎉")
+  
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Analytics {
+  id           String   @id @default(uuid())
+  shopId       String
+  shop         Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  templateId   String
+  views        Int      @default(0)
+  clicks       Int      @default(0)
+  date         DateTime @default(now())
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([shopId, date])
+}

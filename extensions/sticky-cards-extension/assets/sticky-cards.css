@@ -1,0 +1,47 @@
+/* Sticky Cards Extension Base CSS */
+#sticky-cards-root {
+  position: fixed;
+  z-index: 2147483647; /* Max z-index */
+  pointer-events: none; /* Let clicks pass through empty space */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sticky-card-container {
+  pointer-events: auto; /* Re-enable clicks on the actual cards */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Animations */
+@keyframes sc-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sc-slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.sc-animate-fade { animation: sc-fade-in 0.5s ease-out forwards; }
+.sc-animate-slide { animation: sc-slide-up 0.5s ease-out forwards; }
+
+/* Templates base */
+.sc-template-1 {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.sc-template-2 {
+  /* Floating Glass */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+/* Positioning */
+.sc-pos-bottom_right { bottom: 20px; right: 20px; }
+.sc-pos-bottom_left { bottom: 20px; left: 20px; }
+.sc-pos-bottom_center { bottom: 20px; left: 50%; transform: translateX(-50%); }
