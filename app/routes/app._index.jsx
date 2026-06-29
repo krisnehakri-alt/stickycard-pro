@@ -15,10 +15,10 @@ import {
   Box
 } from "@shopify/polaris";
 import { 
-  ViewIcon,
-  ClickIcon,
-  TemplateIcon,
-  MoneyIcon
+  BookOpenIcon,
+  ButtonPressIcon,
+  AppsIcon,
+  BankIcon
 } from "@shopify/polaris-icons";
 
 // Loader for fetching dashboard data
@@ -108,7 +108,7 @@ export default function Dashboard() {
                 <Text variant="headingSm" as="h6" tone="subdued">Total Views</Text>
                 <InlineStack align="space-between" blockAlign="center">
                   <span className="metric-value">{data.totalViews.toLocaleString()}</span>
-                  <Icon source={ViewIcon} tone="base" />
+                  <Icon source={BookOpenIcon} tone="base" />
                 </InlineStack>
               </BlockStack>
             </Card>
@@ -118,7 +118,7 @@ export default function Dashboard() {
                 <Text variant="headingSm" as="h6" tone="subdued">Total Clicks</Text>
                 <InlineStack align="space-between" blockAlign="center">
                   <span className="metric-value">{data.totalClicks.toLocaleString()}</span>
-                  <Icon source={ClickIcon} tone="base" />
+                  <Icon source={ButtonPressIcon} tone="base" />
                 </InlineStack>
               </BlockStack>
             </Card>
@@ -128,7 +128,7 @@ export default function Dashboard() {
                 <Text variant="headingSm" as="h6" tone="subdued">Avg. CTR</Text>
                 <InlineStack align="space-between" blockAlign="center">
                   <span className="metric-value">{data.ctr}</span>
-                  <Icon source={TemplateIcon} tone="base" />
+                  <Icon source={AppsIcon} tone="base" />
                 </InlineStack>
               </BlockStack>
             </Card>
@@ -138,7 +138,7 @@ export default function Dashboard() {
                 <Text variant="headingSm" as="h6" tone="subdued">Est. Revenue</Text>
                 <InlineStack align="space-between" blockAlign="center">
                   <span className="metric-value">{data.estimatedRevenue}</span>
-                  <Icon source={MoneyIcon} tone="base" />
+                  <Icon source={BankIcon} tone="base" />
                 </InlineStack>
               </BlockStack>
             </Card>
