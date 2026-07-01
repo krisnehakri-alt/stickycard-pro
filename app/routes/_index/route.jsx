@@ -125,9 +125,9 @@ export default function App() {
           display: flex;
           background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          padding: 4px;
-          max-width: 500px;
+          border-radius: 16px;
+          padding: 8px;
+          max-width: 550px;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         @media (max-width: 900px) {
@@ -140,8 +140,8 @@ export default function App() {
           background: transparent;
           border: none;
           color: white;
-          padding: 16px 20px;
-          font-size: 16px;
+          padding: 20px 24px;
+          font-size: 18px;
           outline: none;
         }
         .login-input::placeholder {
@@ -151,14 +151,14 @@ export default function App() {
           background: linear-gradient(90deg, #7c3aed 0%, #db2777 100%);
           color: white;
           border: none;
-          border-radius: 8px;
-          padding: 0 32px;
-          font-size: 16px;
+          border-radius: 10px;
+          padding: 0 40px;
+          font-size: 18px;
           font-weight: 600;
           cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
           transition: transform 0.2s, box-shadow 0.2s;
         }
         .login-button:hover {
