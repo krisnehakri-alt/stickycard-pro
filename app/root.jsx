@@ -1,4 +1,7 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { addDocumentResponseHeaders } from "./shopify.server";
+
+export const headers = addDocumentResponseHeaders;
 
 export default function App() {
   return (
