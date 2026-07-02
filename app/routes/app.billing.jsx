@@ -9,7 +9,8 @@ import {
   InlineStack,
   Button,
   List,
-  Box
+  Box,
+  Banner
 } from "@shopify/polaris";
 
 export const loader = async ({ request }) => {
@@ -52,28 +53,40 @@ export const action = async ({ request }) => {
 
   try {
     // Request new plan and redirect to Shopify approval page
-    const response = await billing.request({
+    await billing.request({
       plan,
       isTest: true,
       returnUrl: `https://admin.shopify.com/store/${session.shop.split('.')[0]}/apps/${process.env.SHOPIFY_API_KEY}/app`,
     });
     
-    // If Shopify returned a Response, we can throw it so React Router handles the redirect
-    throw response;
+    return null;
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) {
+      // If Shopify throws a 401 XHR redirect, intercept it and return it as JSON so the client can redirect cleanly
+      if (error.status === 401 && error.headers.has('X-Shopify-API-Request-Failure-Reauthorize-Url')) {
+        return { redirectUrl: error.headers.get('X-Shopify-API-Request-Failure-Reauthorize-Url') };
+      }
+      throw error; // Re-throw standard redirects (e.g. 302 to /auth/exitIframe)
+    }
     // Catch real errors and return JSON so it doesn't crash the entire app
     console.error("Billing action failed:", error);
-    return new Response(JSON.stringify({ error: error.message || String(error) }), { 
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return { error: error.message || String(error) };
   }
 };
 
+import { useEffect } from "react";
+import { useActionData } from "react-router";
+
 export default function Billing() {
   const data = useLoaderData();
+  const actionData = useActionData();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (actionData?.redirectUrl) {
+      window.open(actionData.redirectUrl, '_top');
+    }
+  }, [actionData]);
 
   const plans = [
     {
@@ -112,6 +125,13 @@ export default function Billing() {
       title="Subscription Plans"
       backAction={{ content: 'Dashboard', onAction: () => navigate('/app') }}
     >
+      {actionData?.error && (
+        <Box paddingBlockEnd="400">
+          <Banner title="Billing Request Failed" tone="critical">
+            <p>{actionData.error}</p>
+          </Banner>
+        </Box>
+      )}
       <Layout>
         {plans.map(plan => (
           <Layout.Section variant="oneThird" key={plan.name}>
