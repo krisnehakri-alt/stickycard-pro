@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, Form } from "react-router";
 import { authenticate } from "../shopify.server";
 import {
   Page,
@@ -126,7 +126,7 @@ export default function Billing() {
                   </List>
                 </Box>
 
-                <form method="POST">
+                <Form method="POST" reloadDocument>
                   <input type="hidden" name="plan" value={plan.name} />
                   <Button
                     fullWidth
@@ -136,7 +136,7 @@ export default function Billing() {
                   >
                     {plan.isCurrent ? "Current Plan" : "Upgrade"}
                   </Button>
-                </form>
+                </Form>
               </BlockStack>
             </Card>
           </Layout.Section>
