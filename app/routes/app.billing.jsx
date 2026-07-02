@@ -62,9 +62,12 @@ export const action = async ({ request }) => {
     throw response;
   } catch (error) {
     if (error instanceof Response) throw error;
-    // Catch real errors and throw a Response so it doesn't get masked as 'Unexpected Server Error' in production
+    // Catch real errors and return JSON so it doesn't crash the entire app
     console.error("Billing action failed:", error);
-    throw new Response(error.stack || error.message || String(error), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message || String(error) }), { 
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
 };
 
@@ -126,7 +129,7 @@ export default function Billing() {
                   </List>
                 </Box>
 
-                <Form method="POST" reloadDocument>
+                <Form method="POST">
                   <input type="hidden" name="plan" value={plan.name} />
                   <Button
                     fullWidth

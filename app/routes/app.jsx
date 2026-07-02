@@ -50,8 +50,20 @@ export function ErrorBoundary() {
   // FIX for Vercel/Production minification bug:
   // Shopify's `boundary.error` relies on `error.constructor.name === 'ErrorResponse'`
   // which breaks when Vite minifies class names in production!
-  if (isRouteErrorResponse(error) && typeof error.data === 'string' && error.data.includes('app-bridge.js')) {
-    return <div dangerouslySetInnerHTML={{ __html: error.data }} />;
+  if (isRouteErrorResponse(error)) {
+    // 1. Handle HTML snippet response from document requests
+    if (typeof error.data === 'string' && error.data.includes('app-bridge.js')) {
+      return <div dangerouslySetInnerHTML={{ __html: error.data }} />;
+    }
+    
+    // 2. Handle 401 Reauthorize response from XHR requests (App Bridge v4)
+    if (error.status === 401 && error.headers && error.headers.has('X-Shopify-API-Request-Failure-Reauthorize-Url')) {
+      const reauthorizeUrl = error.headers.get('X-Shopify-API-Request-Failure-Reauthorize-Url');
+      if (typeof window !== 'undefined') {
+        window.open(reauthorizeUrl, '_top');
+      }
+      return null;
+    }
   }
 
   try {
