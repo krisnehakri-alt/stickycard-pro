@@ -36,7 +36,7 @@ export const loader = async ({ request }) => {
 };
 
 const renderPreview = (templateId, isModal = false) => {
-  const containerHeight = isModal ? '400px' : (templateId === 'premium_banner' ? '100%' : '240px');
+  const containerHeight = isModal ? '400px' : '240px';
   const innerScale = isModal ? 'scale(1.2)' : 'scale(1)';
 
   switch(templateId) {
@@ -116,10 +116,9 @@ const renderPreview = (templateId, isModal = false) => {
         </div>
       );
     case 'template_7':
-    case 'premium_banner':
       return (
-        <div style={{ background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', height: templateId === 'premium_banner' && !isModal ? '100%' : containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: templateId === 'premium_banner' && !isModal ? '320px' : '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+        <div style={{ background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ transform: innerScale, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
              <div style={{ color: '#fff', fontSize: '16px', fontWeight: '600', letterSpacing: '1px' }}>MEGA OFFER</div>
              <div style={{ color: '#4facfe', fontSize: '32px', fontWeight: '900', marginTop: '4px' }}>60% OFF</div>
              <div style={{ marginTop: '4px', color: '#ccc', fontSize: '12px' }}>Limited Time Only</div>
@@ -199,32 +198,6 @@ export default function Templates() {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 24px;
-        }
-        .premium-banner {
-          background: #2a2a3e;
-          border-radius: 12px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: row;
-          margin-top: 40px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .premium-banner-content {
-          padding: 40px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          flex: 1;
-        }
-        .premium-banner-preview {
-          flex: 1;
-          min-width: 300px;
-        }
-        @media (max-width: 768px) {
-          .premium-banner {
-            flex-direction: column;
-          }
         }
       `}</style>
       
@@ -327,32 +300,7 @@ export default function Templates() {
             })}
           </div>
 
-          {/* Bottom Premium Showcase */}
-          <div className="premium-banner">
-            <div className="premium-banner-preview">
-               {renderPreview('premium_banner')}
-            </div>
-            <div className="premium-banner-content">
-               <InlineStack gap="200" blockAlign="center">
-                 <div style={{ color: 'white' }}><Icon source={LockIcon} tone="base" /></div>
-                 <h2 style={{ color: 'white', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Enterprise Ultimate</h2>
-                 <span style={{ 
-                    background: '#fcf1cd', 
-                    color: '#7d6000', 
-                    padding: '4px 8px', 
-                    borderRadius: '12px', 
-                    fontSize: '11px', 
-                    fontWeight: 'bold',
-                  }}>
-                    PREMIUM
-                  </span>
-               </InlineStack>
-               <div style={{ marginTop: '16px', marginBottom: '24px', color: '#e5e5e5', fontSize: '16px' }}>
-                 Unlock this premium template and take your offers to the next level.
-               </div>
-               <Button size="large" onClick={() => navigate('/app/billing')}>Upgrade to Premium</Button>
-            </div>
-          </div>
+
         </Layout.Section>
       </Layout>
 
