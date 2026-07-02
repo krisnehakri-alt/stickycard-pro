@@ -21,28 +21,35 @@ import {
   BankIcon
 } from "@shopify/polaris-icons";
 
-// Loader for fetching dashboard data
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-  
-  // In a real app, you would fetch these from the Prisma database based on the shop
-  // const shop = await prisma.shop.findUnique({ ... })
-  
-  return {
-    shopDomain: "demo-shop.myshopify.com",
-    activeSubscription: "FREE",
-    activeCardsCount: 2,
-    totalViews: 12450,
-    totalClicks: 840,
-    ctr: "6.7%",
-    mostUsedTemplate: "Floating Glass",
-    estimatedRevenue: "$1,240.50",
-    recentActivity: [
-      { id: "1", action: "Created new card", card: "Summer Sale", date: "2 hours ago" },
-      { id: "2", action: "Updated template", card: "Welcome Offer", date: "1 day ago" },
-      { id: "3", action: "Upgraded plan", card: "Starter", date: "3 days ago" },
-    ]
-  };
+  try {
+    await authenticate.admin(request);
+    
+    // In a real app, you would fetch these from the Prisma database based on the shop
+    // const shop = await prisma.shop.findUnique({ ... })
+    
+    return {
+      shopDomain: "demo-shop.myshopify.com",
+      activeSubscription: "FREE",
+      activeCardsCount: 2,
+      totalViews: 12450,
+      totalClicks: 840,
+      ctr: "6.7%",
+      mostUsedTemplate: "Floating Glass",
+      estimatedRevenue: "$1,240.50",
+      recentActivity: [
+        { id: "1", action: "Created new card", card: "Summer Sale", date: "2 hours ago" },
+        { id: "2", action: "Updated template", card: "Welcome Offer", date: "1 day ago" },
+        { id: "3", action: "Upgraded plan", card: "Starter", date: "3 days ago" },
+      ]
+    };
+  } catch (error) {
+    if (error instanceof Response) {
+      throw error;
+    }
+    console.error("[app._index.jsx] Critical loader error:", error);
+    throw error;
+  }
 };
 
 export default function Dashboard() {

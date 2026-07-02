@@ -13,6 +13,13 @@ export const MONTHLY_PLAN_STARTER = 'STARTER';
 export const MONTHLY_PLAN_GROWTH = 'GROWTH';
 export const MONTHLY_PLAN_PREMIUM = 'PREMIUM';
 
+// Validate environment variables on server boot to prevent silent 500 errors in Vercel
+const requiredEnvVars = ['SHOPIFY_API_KEY', 'SHOPIFY_API_SECRET', 'SCOPES', 'SHOPIFY_APP_URL', 'DATABASE_URL'];
+const missingEnvs = requiredEnvVars.filter(key => !process.env[key]);
+if (missingEnvs.length > 0) {
+  console.error(`\n[CRITICAL ERROR] The following required Vercel Environment Variables are missing: ${missingEnvs.join(', ')}\n`);
+}
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",

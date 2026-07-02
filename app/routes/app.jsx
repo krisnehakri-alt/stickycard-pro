@@ -4,10 +4,17 @@ import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-
-  // eslint-disable-next-line no-undef
-  return { apiKey: process.env.SHOPIFY_API_KEY || "" };
+  try {
+    await authenticate.admin(request);
+    // eslint-disable-next-line no-undef
+    return { apiKey: process.env.SHOPIFY_API_KEY || "" };
+  } catch (error) {
+    if (error instanceof Response) {
+      throw error; // Let Shopify App Bridge / OAuth redirects pass through
+    }
+    console.error("[app.jsx] Critical loader error:", error);
+    throw error;
+  }
 };
 
 import { AppProvider as PolarisAppProvider } from "@shopify/polaris";
