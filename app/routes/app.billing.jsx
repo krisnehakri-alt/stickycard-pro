@@ -50,15 +50,22 @@ export const action = async ({ request }) => {
     return null;
   }
 
-  // Request new plan and redirect to Shopify approval page
-  const response = await billing.request({
-    plan,
-    isTest: true,
-    returnUrl: `https://admin.shopify.com/store/${session.shop.split('.')[0]}/apps/${process.env.SHOPIFY_API_KEY}/app`,
-  });
-  
-  // If Shopify returned a Response, we can throw it so React Router handles the redirect
-  throw response;
+  try {
+    // Request new plan and redirect to Shopify approval page
+    const response = await billing.request({
+      plan,
+      isTest: true,
+      returnUrl: `https://admin.shopify.com/store/${session.shop.split('.')[0]}/apps/${process.env.SHOPIFY_API_KEY}/app`,
+    });
+    
+    // If Shopify returned a Response, we can throw it so React Router handles the redirect
+    throw response;
+  } catch (error) {
+    if (error instanceof Response) throw error;
+    // Catch real errors and throw a Response so it doesn't get masked as 'Unexpected Server Error' in production
+    console.error("Billing action failed:", error);
+    throw new Response(error.stack || error.message || String(error), { status: 500 });
+  }
 };
 
 export default function Billing() {
