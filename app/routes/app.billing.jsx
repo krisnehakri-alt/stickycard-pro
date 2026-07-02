@@ -51,11 +51,14 @@ export const action = async ({ request }) => {
   }
 
   // Request new plan and redirect to Shopify approval page
-  return await billing.request({
+  const response = await billing.request({
     plan,
     isTest: true,
     returnUrl: `https://admin.shopify.com/store/${session.shop.split('.')[0]}/apps/${process.env.SHOPIFY_API_KEY}/app`,
   });
+  
+  // If Shopify returned a Response, we can throw it so React Router handles the redirect
+  throw response;
 };
 
 export default function Billing() {

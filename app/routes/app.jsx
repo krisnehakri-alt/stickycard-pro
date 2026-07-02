@@ -41,9 +41,25 @@ export default function App() {
   );
 }
 
+import { isRouteErrorResponse } from "react-router";
+
 // Shopify needs React Router to catch some thrown responses, so that their headers are included in the response.
 export function ErrorBoundary() {
-  return boundary.error(useRouteError());
+  const error = useRouteError();
+  
+  // FIX for Vercel/Production minification bug:
+  // Shopify's `boundary.error` relies on `error.constructor.name === 'ErrorResponse'`
+  // which breaks when Vite minifies class names in production!
+  if (isRouteErrorResponse(error) && typeof error.data === 'string' && error.data.includes('app-bridge.js')) {
+    return <div dangerouslySetInnerHTML={{ __html: error.data }} />;
+  }
+
+  try {
+    return boundary.error(error);
+  } catch (e) {
+    // Let it bubble up to root error boundary if it's a real crash
+    throw error;
+  }
 }
 
 export const headers = (headersArgs) => {
