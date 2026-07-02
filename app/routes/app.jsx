@@ -11,6 +11,7 @@ export const loader = async ({ request }) => {
 };
 
 import { AppProvider as PolarisAppProvider } from "@shopify/polaris";
+import polarisTranslations from "@shopify/polaris/locales/en.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
@@ -20,7 +21,7 @@ export default function App() {
 
   return (
     <AppProvider embedded apiKey={apiKey}>
-      <PolarisAppProvider i18n={{}}>
+      <PolarisAppProvider i18n={polarisTranslations}>
         <s-app-nav>
           <s-link href="/app">Dashboard</s-link>
           <s-link href="/app/templates">Templates</s-link>
