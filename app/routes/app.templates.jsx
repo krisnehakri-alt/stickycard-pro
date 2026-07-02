@@ -4,15 +4,9 @@ import { useState } from "react";
 import { 
   Page, 
   Layout, 
-  Card, 
   Text, 
-  BlockStack, 
   InlineStack, 
   Button, 
-  Badge,
-  Box,
-  Divider,
-  Icon,
   Modal
 } from "@shopify/polaris";
 import { ViewIcon, LockIcon } from '@shopify/polaris-icons';
@@ -140,25 +134,7 @@ export default function Templates() {
   const planOrder = { "FREE": 1, "STARTER": 2, "GROWTH": 3, "PREMIUM": 4 };
   const currentPlanValue = planOrder[data.activeSubscription];
 
-  const getPlanPrice = (plan) => {
-    switch(plan) {
-      case 'FREE': return '$0/month';
-      case 'STARTER': return '$39/month';
-      case 'GROWTH': return '$59/month';
-      case 'PREMIUM': return '$99/month';
-      default: return '$0/month';
-    }
-  };
 
-  const getPlanBadgeTone = (plan) => {
-    switch(plan) {
-      case 'FREE': return 'info';
-      case 'STARTER': return 'success';
-      case 'GROWTH': return 'magic'; 
-      case 'PREMIUM': return 'warning'; 
-      default: return 'info';
-    }
-  };
   
   const getBadgeColor = (plan) => {
     switch(plan) {
@@ -202,50 +178,6 @@ export default function Templates() {
       `}</style>
       
       <Layout>
-        {/* Left Sidebar */}
-        <Layout.Section variant="oneThird">
-          <BlockStack gap="400">
-            <Card>
-              <BlockStack gap="400">
-                <Text variant="headingMd" as="h2">Plan Details</Text>
-                
-                <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="bodyMd" tone="subdued">Current Plan</Text>
-                  <Badge tone={getPlanBadgeTone(data.activeSubscription)}>{data.activeSubscription}</Badge>
-                </InlineStack>
-
-                <Divider />
-                
-                <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="bodyMd" tone="subdued">Monthly Price</Text>
-                  <Text variant="bodyMd" fontWeight="bold">{getPlanPrice(data.activeSubscription)}</Text>
-                </InlineStack>
-
-                <Divider />
-
-                <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="bodyMd" tone="subdued">Next Billing Date</Text>
-                  <Text variant="bodyMd" fontWeight="bold">Aug 1, 2026</Text>
-                </InlineStack>
-                
-                <Box paddingBlockStart="200">
-                  <Button fullWidth onClick={() => navigate('/app/billing')}>Manage Plan</Button>
-                </Box>
-              </BlockStack>
-            </Card>
-
-            <Card>
-              <BlockStack gap="400">
-                <Text variant="headingMd" as="h2">Need Help?</Text>
-                <Text variant="bodyMd" tone="subdued">
-                  Our support team is available 24/7 to help you with any questions.
-                </Text>
-                <Button fullWidth variant="plain">Contact Support</Button>
-              </BlockStack>
-            </Card>
-          </BlockStack>
-        </Layout.Section>
-
         {/* Main Grid */}
         <Layout.Section>
           <div className="template-grid">
