@@ -45,7 +45,11 @@ api_version = "2026-07"
   topics = [ "app/scopes_update" ]
 
 [auth]
-redirect_urls = [ "https://stickycard-pro.vercel.app/api/auth" ]
+redirect_urls = [
+  "https://stickycard-pro.vercel.app/auth/callback",
+  "https://stickycard-pro.vercel.app/auth/shopify/callback",
+  "https://stickycard-pro.vercel.app/api/auth/callback"
+]
 
 [build]
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
