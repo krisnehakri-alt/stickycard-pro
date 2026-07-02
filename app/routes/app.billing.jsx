@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, Form } from "react-router";
+import { useLoaderData, useNavigate, Form, redirect } from "react-router";
 import { authenticate } from "../shopify.server";
 import {
   Page,
@@ -47,7 +47,7 @@ export const action = async ({ request }) => {
         prorate: true,
       });
     }
-    return null;
+    return redirect("/app/billing");
   }
 
   try {
