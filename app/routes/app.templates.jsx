@@ -172,8 +172,13 @@ export default function Templates() {
         }
         .template-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: 24px;
+        }
+        @media (max-width: 650px) {
+          .template-grid {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
       
