@@ -1,5 +1,7 @@
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useSubmit, Form } from "react-router";
+import { redirect } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
+import prisma from "../db.server";
 import { useState } from "react";
 import { 
   Page, 
@@ -10,6 +12,61 @@ import {
   Modal
 } from "@shopify/polaris";
 import { ViewIcon, LockIcon } from '@shopify/polaris-icons';
+
+export const action = async ({ request }) => {
+  const { session } = await authenticate.admin(request);
+  const formData = await request.formData();
+  const templateId = formData.get("templateId");
+
+  if (!templateId) return { error: "No template selected" };
+
+  try {
+    let shop = await prisma.shop.findUnique({ where: { shopDomain: session.shop } });
+    if (!shop) {
+      shop = await prisma.shop.create({ data: { shopDomain: session.shop } });
+    }
+
+    // Deactivate all existing cards
+    await prisma.stickyCard.updateMany({
+      where: { shopId: shop.id },
+      data: { isActive: false }
+    });
+
+    const defaultCoupons = {
+      'template_1': 'WELCOME20',
+      'template_2': 'SAVE25',
+      'template_3': 'NEON30',
+      'template_4': 'LUXURY40',
+      'template_5': 'LAUNCH35',
+      'template_6': 'VIP50',
+      'template_7': 'MEGA60'
+    };
+    
+    // Create new active card
+    const newCard = await prisma.stickyCard.create({
+      data: {
+        shopId: shop.id,
+        name: "My Campaign",
+        templateId,
+        displayPages: "ALL",
+        isActive: true,
+        items: {
+          create: [{ 
+            heading: "Special Offer", 
+            description: "Get 20% off your first order!", 
+            buttonText: "Shop Now", 
+            couponCode: defaultCoupons[templateId] || 'WELCOME20' 
+          }]
+        }
+      }
+    });
+
+    return redirect(`/app/card/${newCard.id}?template=${templateId}`);
+  } catch (error) {
+    console.error("Error activating template:", error);
+    return { error: "Failed to activate template." };
+  }
+};
 
 export const loader = async ({ request }) => {
   const { billing } = await authenticate.admin(request);
@@ -138,13 +195,22 @@ const renderPreview = (templateId, isModal = false) => {
 export default function Templates() {
   const data = useLoaderData();
   const navigate = useNavigate();
+  const submit = useSubmit();
   const [previewTemplateId, setPreviewTemplateId] = useState(null);
 
   const planOrder = { "FREE": 1, "STARTER": 2, "GROWTH": 3, "PREMIUM": 4 };
   const currentPlanValue = planOrder[data.activeSubscription];
 
+  const handleUseTemplate = (templateId, isLocked) => {
+    if (isLocked) {
+      navigate('/app/billing');
+    } else {
+      const formData = new FormData();
+      formData.append("templateId", templateId);
+      submit(formData, { method: "post" });
+    }
+  };
 
-  
   const getBadgeColor = (plan) => {
     switch(plan) {
       case 'FREE': return { bg: '#e4f0f6', text: '#005b82' }; 
@@ -237,7 +303,7 @@ export default function Templates() {
                             fullWidth 
                             variant={isLocked ? "secondary" : "primary"}
                             icon={isLocked ? LockIcon : undefined}
-                            onClick={() => isLocked ? navigate('/app/billing') : navigate(`/app/card/new?template=${template.id}`)}
+                            onClick={() => handleUseTemplate(template.id, isLocked)}
                           >
                             Use Template
                           </Button>
