@@ -15,7 +15,7 @@ export const loader = async ({ request }) => {
     const shop = await prisma.shop.findUnique({
       where: { shopDomain },
       include: {
-        StickyCard: {
+        stickyCards: {
           where: { isActive: true },
           include: { items: true },
           take: 1
@@ -23,13 +23,13 @@ export const loader = async ({ request }) => {
       }
     });
 
-    if (!shop || !shop.StickyCard || shop.StickyCard.length === 0) {
+    if (!shop || !shop.stickyCards || shop.stickyCards.length === 0) {
       return Response.json({ activeCard: null }, { 
         headers: { "Access-Control-Allow-Origin": "*" } 
       });
     }
 
-    return Response.json({ activeCard: shop.StickyCard[0] }, { 
+    return Response.json({ activeCard: shop.stickyCards[0] }, { 
       headers: { "Access-Control-Allow-Origin": "*" } 
     });
   } catch (error) {
