@@ -1,5 +1,4 @@
-import { useLoaderData, useNavigate, useSubmit, Form } from "react-router";
-import { redirect } from "@remix-run/node";
+import { useLoaderData, useNavigate, useSubmit, Form, redirect } from "react-router";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
 import { useState } from "react";

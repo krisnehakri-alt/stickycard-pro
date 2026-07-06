@@ -1,4 +1,3 @@
-import { json } from "@remix-run/node";
 import prisma from "../db.server";
 
 export const loader = async ({ request }) => {
@@ -6,7 +5,7 @@ export const loader = async ({ request }) => {
   const shopDomain = url.searchParams.get("shop");
   
   if (!shopDomain) {
-    return json({ error: "Missing shop parameter" }, { 
+    return Response.json({ error: "Missing shop parameter" }, { 
       status: 400,
       headers: { "Access-Control-Allow-Origin": "*" }
     });
@@ -25,17 +24,17 @@ export const loader = async ({ request }) => {
     });
 
     if (!shop || !shop.StickyCard || shop.StickyCard.length === 0) {
-      return json({ activeCard: null }, { 
+      return Response.json({ activeCard: null }, { 
         headers: { "Access-Control-Allow-Origin": "*" } 
       });
     }
 
-    return json({ activeCard: shop.StickyCard[0] }, { 
+    return Response.json({ activeCard: shop.StickyCard[0] }, { 
       headers: { "Access-Control-Allow-Origin": "*" } 
     });
   } catch (error) {
     console.error("Error in api.storefront.cards:", error);
-    return json({ error: "Internal Server Error" }, { 
+    return Response.json({ error: "Internal Server Error" }, { 
       status: 500,
       headers: { "Access-Control-Allow-Origin": "*" }
     });
