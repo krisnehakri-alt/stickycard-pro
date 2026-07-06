@@ -48,6 +48,7 @@ export const action = async ({ request, params }) => {
       await prisma.stickyCard.update({
         where: { id: cardId },
         data: {
+          templateId,
           displayPages,
           isActive: true, // Ensure it's active
           items: {

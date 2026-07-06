@@ -20,6 +20,11 @@
   }
 
   function shouldDisplayOnPage(displayPages) {
+    // Always display in Shopify Theme Editor so merchants can see it
+    if (window.Shopify && window.Shopify.designMode) {
+      return true;
+    }
+
     const path = window.location.pathname;
     
     if (displayPages === 'HOMEPAGE') {
