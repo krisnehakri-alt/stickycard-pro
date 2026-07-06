@@ -23,7 +23,7 @@ export const action = async ({ request, params }) => {
   const description = formData.get("description");
   const buttonText = formData.get("buttonText");
   const displayPages = formData.get("displayPages");
-  const triggerRule = formData.get("triggerRule");
+  const couponCode = formData.get("couponCode");
   const templateId = formData.get("templateId") || "template_1";
   
   if (!heading || !description || !buttonText) {
@@ -43,10 +43,9 @@ export const action = async ({ request, params }) => {
         where: { id: cardId },
         data: {
           displayPages,
-          triggerRule,
           items: {
             deleteMany: {},
-            create: [{ heading, description, buttonText }]
+            create: [{ heading, description, buttonText, couponCode }]
           }
         }
       });
@@ -57,10 +56,9 @@ export const action = async ({ request, params }) => {
           name: "My Campaign",
           templateId,
           displayPages,
-          triggerRule,
           isActive: true,
           items: {
-            create: [{ heading, description, buttonText }]
+            create: [{ heading, description, buttonText, couponCode }]
           }
         }
       });
@@ -77,17 +75,28 @@ export const loader = async ({ request, params }) => {
   const cardId = params.id;
   const templateId = new URL(request.url).searchParams.get("template") || "template_1";
 
+  const defaultCoupons = {
+    'template_1': 'WELCOME20',
+    'template_2': 'SAVE25',
+    'template_3': 'NEON30',
+    'template_4': 'LUXURY40',
+    'template_5': 'LAUNCH35',
+    'template_6': 'VIP50',
+    'template_7': 'MEGA60'
+  };
+  const defaultCouponCode = defaultCoupons[templateId] || 'WELCOME20';
+
   let card = {
     name: "My New Campaign",
     isActive: true,
     displayPages: "ALL",
-    triggerRule: "IMMEDIATE",
     desktopPosition: "BOTTOM_RIGHT",
     items: [
       {
         heading: "Special Offer",
         description: "Get 20% off your first order!",
         buttonText: "Shop Now",
+        couponCode: defaultCouponCode
       }
     ]
   };
@@ -113,7 +122,7 @@ export const loader = async ({ request, params }) => {
   };
 };
 
-const renderPreview = (templateId, heading, description, buttonText) => {
+const renderPreview = (templateId, heading, description, buttonText, couponCode) => {
   const containerHeight = '280px';
   const innerScale = 'scale(1)';
 
@@ -124,7 +133,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
           <div style={{ transform: innerScale, background: 'white', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.05)' }}>
              <Text variant="headingLg" as="h4">{heading}</Text>
              <div style={{ marginTop: '8px' }}><Text variant="bodyMd">{description}</Text></div>
-             <div style={{ marginTop: '16px', fontSize: '12px', color: '#666' }}>Use Code: <strong>WELCOME20</strong></div>
+             <div style={{ marginTop: '16px', fontSize: '12px', color: '#666' }}>Use Code: <strong>{couponCode}</strong></div>
              <div style={{ marginTop: '16px', background: '#111', color: '#fff', padding: '10px', borderRadius: '6px', fontWeight: 'bold' }}>{buttonText}</div>
           </div>
         </div>
@@ -138,7 +147,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <Text variant="headingSm" as="h5">Special Offer!</Text>
              <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#111', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px' }}><Text variant="bodyMd">{description}</Text></div>
-             <div style={{ marginTop: '12px', fontSize: '12px', color: '#333' }}>Use Code: <strong>SAVE25</strong></div>
+             <div style={{ marginTop: '12px', fontSize: '12px', color: '#333' }}>Use Code: <strong>{couponCode}</strong></div>
              <div style={{ marginTop: '16px', background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)', color: '#fff', padding: '10px', borderRadius: '8px', fontWeight: 'bold' }}>{buttonText}</div>
           </div>
         </div>
@@ -150,7 +159,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <div style={{ color: '#ff007f', textShadow: '0 0 8px rgba(255,0,127,0.6)', fontSize: '14px', fontWeight: 'bold' }}>BIG SALE</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '900', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#ddd', fontSize: '13px' }}>{description}</div>
-             <div style={{ marginTop: '12px', fontSize: '11px', color: '#aaa' }}>Use Code: <span style={{ color: '#ff007f' }}>NEON30</span></div>
+             <div style={{ marginTop: '12px', fontSize: '11px', color: '#aaa' }}>Use Code: <span style={{ color: '#ff007f' }}>{couponCode}</span></div>
              <div style={{ marginTop: '16px', background: '#ff007f', color: '#fff', padding: '10px', borderRadius: '6px', fontWeight: 'bold', boxShadow: '0 0 10px rgba(255,0,127,0.4)' }}>{buttonText}</div>
           </div>
         </div>
@@ -163,7 +172,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <div style={{ color: '#d4af37', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase' }}>Exclusive Offer</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '300', marginTop: '8px', fontFamily: 'serif' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#aaa', fontSize: '12px' }}>{description}</div>
-             <div style={{ marginTop: '12px', fontSize: '11px', color: '#888' }}>Use Code: <span style={{ color: '#d4af37' }}>LUXURY40</span></div>
+             <div style={{ marginTop: '12px', fontSize: '11px', color: '#888' }}>Use Code: <span style={{ color: '#d4af37' }}>{couponCode}</span></div>
              <div style={{ marginTop: '16px', background: 'linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7)', color: '#000', padding: '10px', borderRadius: '2px', fontWeight: 'bold' }}>{buttonText}</div>
           </div>
         </div>
@@ -176,7 +185,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <div style={{ color: '#333', fontSize: '13px', fontWeight: 'bold' }}>New Arrival</div>
              <div style={{ color: '#2f3542', fontSize: '18px', fontWeight: '800', marginTop: '2px' }}>{heading}</div>
              <div style={{ color: '#ff4757', fontSize: '14px', fontWeight: '600', marginTop: '4px' }}>{description}</div>
-             <div style={{ marginTop: '12px', fontSize: '11px', color: '#747d8c' }}>Use Code: <span style={{ color: '#333', fontWeight: 'bold' }}>LAUNCH35</span></div>
+             <div style={{ marginTop: '12px', fontSize: '11px', color: '#747d8c' }}>Use Code: <span style={{ color: '#333', fontWeight: 'bold' }}>{couponCode}</span></div>
              <div style={{ marginTop: '16px', background: 'linear-gradient(135deg, #ff6b81 0%, #ff4757 100%)', color: '#fff', padding: '10px', borderRadius: '24px', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(255,71,87,0.3)' }}>{buttonText}</div>
           </div>
         </div>
@@ -188,7 +197,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <div style={{ color: '#ffd700', fontSize: '14px', fontWeight: 'bold', letterSpacing: '1px' }}>VIP ACCESS</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '900', marginTop: '8px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#aaa', fontSize: '12px' }}>{description}</div>
-             <div style={{ marginTop: '12px', fontSize: '11px', color: '#777' }}>Use Code: <span style={{ color: '#fff' }}>VIP50</span></div>
+             <div style={{ marginTop: '12px', fontSize: '11px', color: '#777' }}>Use Code: <span style={{ color: '#fff' }}>{couponCode}</span></div>
              <div style={{ marginTop: '16px', background: '#ffd700', color: '#000', padding: '10px', borderRadius: '4px', fontWeight: '800' }}>{buttonText}</div>
           </div>
         </div>
@@ -200,7 +209,7 @@ const renderPreview = (templateId, heading, description, buttonText) => {
              <div style={{ color: '#fff', fontSize: '16px', fontWeight: '600', letterSpacing: '1px' }}>MEGA OFFER</div>
              <div style={{ color: '#4facfe', fontSize: '28px', fontWeight: '900', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#ccc', fontSize: '12px' }}>{description}</div>
-             <div style={{ marginTop: '12px', fontSize: '11px', color: '#999' }}>Use Code: <span style={{ color: '#fff' }}>MEGA60</span></div>
+             <div style={{ marginTop: '12px', fontSize: '11px', color: '#999' }}>Use Code: <span style={{ color: '#fff' }}>{couponCode}</span></div>
              <div style={{ marginTop: '16px', background: '#0062ff', color: '#fff', padding: '10px', borderRadius: '6px', fontWeight: 'bold' }}>{buttonText}</div>
           </div>
         </div>
@@ -221,7 +230,7 @@ export default function CardEditor() {
   const [description, setDescription] = useState(data.card.items[0].description);
   const [buttonText, setButtonText] = useState(data.card.items[0].buttonText);
   const [displayPages, setDisplayPages] = useState(data.card.displayPages);
-  const [triggerRule, setTriggerRule] = useState(data.card.triggerRule);
+  const [couponCode, setCouponCode] = useState(data.card.items[0].couponCode || "");
 
   const isSaving = navigation.state === "submitting";
 
@@ -242,7 +251,7 @@ export default function CardEditor() {
     formData.append("description", description);
     formData.append("buttonText", buttonText);
     formData.append("displayPages", displayPages);
-    formData.append("triggerRule", triggerRule);
+    formData.append("couponCode", couponCode);
     formData.append("templateId", data.templateId);
     
     submit(formData, { method: "post" });
@@ -287,16 +296,11 @@ export default function CardEditor() {
                     value={displayPages}
                     onChange={setDisplayPages}
                   />
-                  <Select
-                    label="Trigger Condition"
-                    options={[
-                      {label: 'Immediately', value: 'IMMEDIATE'},
-                      {label: 'After 5 seconds', value: 'DELAY_5'},
-                      {label: 'On Exit Intent', value: 'EXIT_INTENT'},
-                      {label: 'Scroll to 25%', value: 'SCROLL_25'},
-                    ]}
-                    value={triggerRule}
-                    onChange={setTriggerRule}
+                  <TextField 
+                    label="Coupon Code (Use Code)" 
+                    value={couponCode} 
+                    onChange={setCouponCode} 
+                    autoComplete="off" 
                   />
                 </FormLayout>
               </BlockStack>
@@ -309,7 +313,7 @@ export default function CardEditor() {
             <BlockStack gap="400">
               <Text variant="headingMd" as="h2">Live Preview</Text>
               <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
-                {renderPreview(data.templateId, heading, description, buttonText)}
+                {renderPreview(data.templateId, heading, description, buttonText, couponCode)}
               </div>
             </BlockStack>
           </Card>
