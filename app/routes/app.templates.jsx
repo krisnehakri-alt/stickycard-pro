@@ -200,7 +200,7 @@ export default function Templates() {
               let isLocked = true;
               if (currentPlanValue === 4) isLocked = false;
               else if (currentPlanValue === 3) isLocked = ["template_6", "template_7"].includes(template.id);
-              else if (currentPlanValue === 2) isLocked = !["template_1", "template_2"].includes(template.id);
+              else if (currentPlanValue === 2) isLocked = !["template_1", "template_2", "template_3"].includes(template.id);
               else isLocked = template.id !== "template_1";
               const badgeStyle = getBadgeColor(template.plan);
               
