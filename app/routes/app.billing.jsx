@@ -22,7 +22,7 @@ export const loader = async ({ request }) => {
     isTest: true,
   });
 
-  const activeSubscription = billingCheck.hasActivePayment 
+  const activeSubscription = (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0)
     ? billingCheck.appSubscriptions[0].name 
     : "FREE";
 
@@ -41,7 +41,7 @@ export const action = async ({ request }) => {
       isTest: true,
     });
     
-    if (billingCheck.hasActivePayment) {
+    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
       await billing.cancel({
         subscriptionId: billingCheck.appSubscriptions[0].id,
         isTest: true,
