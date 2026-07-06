@@ -53,3 +53,8 @@ redirect_urls = [
 
 [build]
 automatically_update_urls_on_dev = true
+
+[app_proxy]
+url = "https://stickycard-pro.vercel.app/api/storefront"
+subpath = "stickycards"
+prefix = "apps"

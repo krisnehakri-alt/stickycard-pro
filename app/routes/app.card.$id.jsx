@@ -39,10 +39,17 @@ export const action = async ({ request, params }) => {
     const cardId = params.id;
 
     if (cardId !== "new") {
+      // Deactivate all other cards
+      await prisma.stickyCard.updateMany({
+        where: { shopId: shop.id, id: { not: cardId } },
+        data: { isActive: false }
+      });
+
       await prisma.stickyCard.update({
         where: { id: cardId },
         data: {
           displayPages,
+          isActive: true, // Ensure it's active
           items: {
             deleteMany: {},
             create: [{ heading, description, buttonText, couponCode }]
@@ -50,6 +57,12 @@ export const action = async ({ request, params }) => {
         }
       });
     } else {
+      // Deactivate all existing cards
+      await prisma.stickyCard.updateMany({
+        where: { shopId: shop.id },
+        data: { isActive: false }
+      });
+
       await prisma.stickyCard.create({
         data: {
           shopId: shop.id,
