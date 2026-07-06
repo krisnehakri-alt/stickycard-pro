@@ -12,11 +12,20 @@ import {
 import { ViewIcon, LockIcon } from '@shopify/polaris-icons';
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
+  const { billing } = await authenticate.admin(request);
+  
+  const billingCheck = await billing.check({
+    plans: ["STARTER", "GROWTH", "PREMIUM"],
+    isTest: true,
+  });
+
+  const activeSubscription = billingCheck.hasActivePayment 
+    ? billingCheck.appSubscriptions[0].name 
+    : "FREE";
   
   return {
     shopDomain: "demo-shop.myshopify.com",
-    activeSubscription: "FREE", // Mock
+    activeSubscription,
     templates: [
       { id: "template_1", name: "Clean Modern", plan: "FREE", color: "#f4f6f8" },
       { id: "template_2", name: "Floating Glass", plan: "STARTER", color: "rgba(255,255,255,0.7)" },
@@ -188,7 +197,11 @@ export default function Templates() {
           <div className="template-grid">
             {data.templates.map(template => {
               const reqPlanValue = planOrder[template.plan];
-              const isLocked = reqPlanValue > currentPlanValue;
+              let isLocked = true;
+              if (currentPlanValue === 4) isLocked = false;
+              else if (currentPlanValue === 3) isLocked = ["template_6", "template_7"].includes(template.id);
+              else if (currentPlanValue === 2) isLocked = !["template_1", "template_2"].includes(template.id);
+              else isLocked = template.id !== "template_1";
               const badgeStyle = getBadgeColor(template.plan);
               
               return (

@@ -23,14 +23,24 @@ import {
 
 export const loader = async ({ request }) => {
   try {
-    await authenticate.admin(request);
+    const { billing } = await authenticate.admin(request);
+    
+    // Check active subscription
+    const billingCheck = await billing.check({
+      plans: ["STARTER", "GROWTH", "PREMIUM"],
+      isTest: true,
+    });
+  
+    const activeSubscription = billingCheck.hasActivePayment 
+      ? billingCheck.appSubscriptions[0].name 
+      : "FREE";
     
     // In a real app, you would fetch these from the Prisma database based on the shop
     // const shop = await prisma.shop.findUnique({ ... })
     
     return {
       shopDomain: "demo-shop.myshopify.com",
-      activeSubscription: "FREE",
+      activeSubscription,
       activeCardsCount: 2,
       totalViews: 12450,
       totalClicks: 840,
