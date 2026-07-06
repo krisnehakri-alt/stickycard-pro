@@ -1,5 +1,6 @@
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useSubmit, useNavigation, useActionData } from "react-router";
 import { authenticate } from "../shopify.server";
+import prisma from "../db.server";
 import { 
   Page, 
   Layout, 
@@ -12,35 +13,112 @@ import {
   Button,
   InlineStack
 } from "@shopify/polaris";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+export const action = async ({ request, params }) => {
+  const { session } = await authenticate.admin(request);
+  const formData = await request.formData();
+  
+  const heading = formData.get("heading");
+  const description = formData.get("description");
+  const buttonText = formData.get("buttonText");
+  const displayPages = formData.get("displayPages");
+  const triggerRule = formData.get("triggerRule");
+  const templateId = formData.get("templateId") || "template_1";
+  
+  if (!heading || !description || !buttonText) {
+    return { error: "Please fill in all required fields." };
+  }
+
+  try {
+    let shop = await prisma.shop.findUnique({ where: { shopDomain: session.shop } });
+    if (!shop) {
+      shop = await prisma.shop.create({ data: { shopDomain: session.shop } });
+    }
+
+    const cardId = params.id;
+
+    if (cardId !== "new") {
+      await prisma.stickyCard.update({
+        where: { id: cardId },
+        data: {
+          displayPages,
+          triggerRule,
+          items: {
+            deleteMany: {},
+            create: [{ heading, description, buttonText }]
+          }
+        }
+      });
+    } else {
+      await prisma.stickyCard.create({
+        data: {
+          shopId: shop.id,
+          name: "My Campaign",
+          templateId,
+          displayPages,
+          triggerRule,
+          isActive: true,
+          items: {
+            create: [{ heading, description, buttonText }]
+          }
+        }
+      });
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Save error:", error);
+    return { error: "Failed to save template. Please try again." };
+  }
+};
 
 export const loader = async ({ request, params }) => {
-  await authenticate.admin(request);
+  const { session } = await authenticate.admin(request);
+  const cardId = params.id;
+  const templateId = new URL(request.url).searchParams.get("template") || "template_1";
+
+  let card = {
+    name: "My New Campaign",
+    isActive: true,
+    displayPages: "ALL",
+    triggerRule: "IMMEDIATE",
+    desktopPosition: "BOTTOM_RIGHT",
+    items: [
+      {
+        heading: "Special Offer",
+        description: "Get 20% off your first order!",
+        buttonText: "Shop Now",
+      }
+    ]
+  };
+
+  if (cardId !== "new") {
+    const dbCard = await prisma.stickyCard.findUnique({
+      where: { id: cardId },
+      include: { items: true }
+    });
+    if (dbCard) {
+      card = {
+        ...dbCard,
+        items: dbCard.items.length > 0 ? dbCard.items : card.items
+      };
+    }
+  }
   
   return {
-    shopDomain: "demo-shop.myshopify.com",
-    cardId: params.id,
-    templateId: new URL(request.url).searchParams.get("template") || "template_1",
-    card: {
-      name: "My New Campaign",
-      isActive: true,
-      displayPages: "ALL",
-      triggerRule: "IMMEDIATE",
-      desktopPosition: "BOTTOM_RIGHT",
-      items: [
-        {
-          heading: "Special Offer",
-          description: "Get 20% off your first order!",
-          buttonText: "Shop Now",
-        }
-      ]
-    }
+    shopDomain: session.shop,
+    cardId,
+    templateId,
+    card
   };
 };
 
 export default function CardEditor() {
   const data = useLoaderData();
   const navigate = useNavigate();
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const actionData = useActionData();
   
   const [heading, setHeading] = useState(data.card.items[0].heading);
   const [description, setDescription] = useState(data.card.items[0].description);
@@ -48,11 +126,41 @@ export default function CardEditor() {
   const [displayPages, setDisplayPages] = useState(data.card.displayPages);
   const [triggerRule, setTriggerRule] = useState(data.card.triggerRule);
 
+  const isSaving = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (actionData?.error) {
+      shopify.toast.show(actionData.error, { isError: true });
+    } else if (actionData?.success) {
+      shopify.toast.show("Template saved successfully.");
+      setTimeout(() => {
+        navigate("/app/templates");
+      }, 1000);
+    }
+  }, [actionData, navigate]);
+
+  const handleSave = () => {
+    const formData = new FormData();
+    formData.append("heading", heading);
+    formData.append("description", description);
+    formData.append("buttonText", buttonText);
+    formData.append("displayPages", displayPages);
+    formData.append("triggerRule", triggerRule);
+    formData.append("templateId", data.templateId);
+    
+    submit(formData, { method: "post" });
+  };
+
   return (
     <Page 
       title="Edit Sticky Card" 
       backAction={{content: 'Templates', onAction: () => navigate('/app/templates')}}
-      primaryAction={{content: 'Save', onAction: () => console.log('saved')}}
+      primaryAction={{
+        content: 'Save', 
+        onAction: handleSave,
+        loading: isSaving,
+        disabled: isSaving
+      }}
     >
       <Layout>
         <Layout.Section>
