@@ -2,7 +2,8 @@
   const config = window.StickyCardsConfig || {};
   const shopDomain = config.shopDomain;
   // App Proxy URL
-  const API_URL = `/apps/stickycards/cards?shop=${shopDomain}`;
+  // Shopify App Proxy automatically appends shop, path_prefix, etc.
+  const API_URL = `/apps/stickycards/cards`;
 
   function init() {
     console.log("Sticky Cards Initializing for:", shopDomain);
