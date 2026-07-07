@@ -4,7 +4,48 @@
   "target": "section",
   "stylesheet": "sticky-cards.css",
   "javascript": "sticky-cards.js",
-  "settings": []
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Leave fields blank to use the active template from your app dashboard."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Overrides the active template heading"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "info": "Overrides the active template description"
+    },
+    {
+      "type": "text",
+      "id": "coupon_code",
+      "label": "Coupon Code (Use Code)",
+      "info": "Overrides the active template coupon code"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "info": "Overrides the active template button text"
+    },
+    {
+      "type": "select",
+      "id": "display_pages",
+      "label": "Show on Pages",
+      "options": [
+        { "value": "", "label": "Use App Dashboard Setting" },
+        { "value": "ALL", "label": "All Pages" },
+        { "value": "HOMEPAGE", "label": "Homepage Only" },
+        { "value": "PRODUCT", "label": "Product Pages" }
+      ],
+      "default": ""
+    }
+  ]
 }
 {% endschema %}
 
@@ -12,6 +53,14 @@
   window.StickyCardsConfig = {
     shopDomain: "{{ shop.domain }}",
     appUrl: "https://{{ shop.metafields.sticky_cards.app_url | default: 'your-app-url.com' }}"
+  };
+  
+  window.StickyCardsBlockSettings = {
+    heading: {{ block.settings.heading | json }},
+    description: {{ block.settings.description | json }},
+    couponCode: {{ block.settings.coupon_code | json }},
+    buttonText: {{ block.settings.button_text | json }},
+    displayPages: {{ block.settings.display_pages | json }}
   };
 </script>
 

@@ -41,7 +41,10 @@
   function renderCard(data) {
     if (!data.isActive) return;
     
-    if (!shouldDisplayOnPage(data.displayPages)) {
+    const settings = window.StickyCardsBlockSettings || {};
+    const finalDisplayPages = settings.displayPages || data.displayPages;
+    
+    if (!shouldDisplayOnPage(finalDisplayPages)) {
       return;
     }
     
@@ -58,10 +61,26 @@
 
     const templateId = data.templateId || 'template_1';
     
+    // Clear existing
+    root.innerHTML = '';
+    
     const card = document.createElement("div");
-    card.className = `sticky-card-container sc-animate-slide ${data.templateId || 'template_1'}`;
+    card.className = `sticky-card-container sc-animate-slide ${templateId}`;
 
     card.innerHTML = data.html || '';
+    
+    // Apply overrides
+    const headingEl = card.querySelector('[data-sc-heading]');
+    if (headingEl && settings.heading) headingEl.innerText = settings.heading;
+    
+    const descEl = card.querySelector('[data-sc-description]');
+    if (descEl && settings.description) descEl.innerText = settings.description;
+    
+    const couponEl = card.querySelector('[data-sc-coupon]');
+    if (couponEl && settings.couponCode) couponEl.innerText = settings.couponCode;
+    
+    const btnEl = card.querySelector('[data-sc-button]');
+    if (btnEl && settings.buttonText) btnEl.innerText = settings.buttonText;
     
     root.appendChild(card);
   }
@@ -72,4 +91,9 @@
   } else {
     init();
   }
+  
+  // Support live preview inside Shopify Theme Editor
+  document.addEventListener('shopify:section:load', init);
+  document.addEventListener('shopify:block:select', init);
+  document.addEventListener('shopify:block:deselect', init);
 })();
