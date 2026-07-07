@@ -144,7 +144,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
     case 'template_1':
       return (
         <div style={{ background: '#f8f9fa', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, background: 'white', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.05)' }}>
+          <div style={{ transform: innerScale, background: 'white', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.05)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <Text variant="headingLg" as="h4">{heading}</Text>
              <div style={{ marginTop: '8px' }}><Text variant="bodyMd">{description}</Text></div>
              <div style={{ marginTop: '16px', fontSize: '12px', color: '#666' }}>Use Code: <strong>{couponCode}</strong></div>
@@ -157,7 +157,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
         <div style={{ background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', width: '100px', height: '100px', background: '#ff9a9e', borderRadius: '50%', filter: 'blur(30px)', top: '-20px', left: '-20px' }}></div>
           <div style={{ position: 'absolute', width: '120px', height: '120px', background: '#fecfef', borderRadius: '50%', filter: 'blur(30px)', bottom: '-20px', right: '-20px' }}></div>
-          <div style={{ transform: innerScale, background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.5)', padding: '24px', borderRadius: '16px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 8px 32px rgba(31,38,135,0.15)', zIndex: 1 }}>
+          <div style={{ transform: innerScale, background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.5)', padding: '24px', borderRadius: '16px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 8px 32px rgba(31,38,135,0.15)', zIndex: 1, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <Text variant="headingSm" as="h5">Special Offer!</Text>
              <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#111', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px' }}><Text variant="bodyMd">{description}</Text></div>
@@ -169,7 +169,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
     case 'template_3':
       return (
         <div style={{ background: '#0a0a0a', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, border: '2px solid #ff007f', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 0 15px rgba(255,0,127,0.3), inset 0 0 15px rgba(255,0,127,0.1)' }}>
+          <div style={{ transform: innerScale, border: '2px solid #ff007f', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 0 15px rgba(255,0,127,0.3), inset 0 0 15px rgba(255,0,127,0.1)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <div style={{ color: '#ff007f', textShadow: '0 0 8px rgba(255,0,127,0.6)', fontSize: '14px', fontWeight: 'bold' }}>BIG SALE</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '900', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#ddd', fontSize: '13px' }}>{description}</div>
@@ -182,7 +182,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
       return (
         <div style={{ background: '#111', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', position: 'relative' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, #2a2a2a 0%, #111 100%)' }}></div>
-          <div style={{ transform: innerScale, background: '#1a1a1a', border: '1px solid #d4af37', padding: '24px', borderRadius: '4px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', zIndex: 1 }}>
+          <div style={{ transform: innerScale, background: '#1a1a1a', border: '1px solid #d4af37', padding: '24px', borderRadius: '4px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', zIndex: 1, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <div style={{ color: '#d4af37', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase' }}>Exclusive Offer</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '300', marginTop: '8px', fontFamily: 'serif' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#aaa', fontSize: '12px' }}>{description}</div>
@@ -194,7 +194,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
     case 'template_5':
       return (
         <div style={{ background: 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, background: 'white', padding: '24px', borderRadius: '16px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', position: 'relative' }}>
+          <div style={{ transform: innerScale, background: 'white', padding: '24px', borderRadius: '16px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', position: 'relative', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <div style={{ position: 'absolute', top: '-10px', left: '-10px', background: '#ff4757', color: 'white', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>New</div>
              <div style={{ color: '#333', fontSize: '13px', fontWeight: 'bold' }}>New Arrival</div>
              <div style={{ color: '#2f3542', fontSize: '18px', fontWeight: '800', marginTop: '2px' }}>{heading}</div>
@@ -207,7 +207,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
     case 'template_6':
       return (
         <div style={{ background: '#000', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, background: '#0a0a0a', border: '1px solid #333', padding: '24px', borderRadius: '8px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 15px 35px rgba(0,0,0,0.6)' }}>
+          <div style={{ transform: innerScale, background: '#0a0a0a', border: '1px solid #333', padding: '24px', borderRadius: '8px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 15px 35px rgba(0,0,0,0.6)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <div style={{ color: '#ffd700', fontSize: '14px', fontWeight: 'bold', letterSpacing: '1px' }}>VIP ACCESS</div>
              <div style={{ color: '#fff', fontSize: '26px', fontWeight: '900', marginTop: '8px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#aaa', fontSize: '12px' }}>{description}</div>
@@ -219,7 +219,7 @@ const renderPreview = (templateId, heading, description, buttonText, couponCode)
     case 'template_7':
       return (
         <div style={{ background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', height: containerHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ transform: innerScale, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+          <div style={{ transform: innerScale, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '280px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
              <div style={{ color: '#fff', fontSize: '16px', fontWeight: '600', letterSpacing: '1px' }}>MEGA OFFER</div>
              <div style={{ color: '#4facfe', fontSize: '28px', fontWeight: '900', marginTop: '4px' }}>{heading}</div>
              <div style={{ marginTop: '4px', color: '#ccc', fontSize: '12px' }}>{description}</div>
