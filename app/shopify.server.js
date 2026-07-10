@@ -20,12 +20,17 @@ if (missingEnvs.length > 0) {
   console.error(`\n[CRITICAL ERROR] The following required Vercel Environment Variables are missing: ${missingEnvs.join(', ')}\n`);
 }
 
+let appUrl = process.env.SHOPIFY_APP_URL || "";
+if (appUrl && !appUrl.startsWith("http://") && !appUrl.startsWith("https://")) {
+  appUrl = "https://" + appUrl;
+}
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
   apiVersion: ApiVersion.October25,
   scopes: process.env.SCOPES?.split(","),
-  appUrl: process.env.SHOPIFY_APP_URL || "",
+  appUrl,
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
