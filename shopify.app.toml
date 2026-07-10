@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "c01f7c8d9677dae95a5345105de63275"
-application_url = "https://stickycard-pro.vercel.app"
+application_url = "https://stickycard-pro.sabaiinnovations.com"
 embedded = true
 name = "stickycard pro"
 
@@ -46,15 +46,15 @@ api_version = "2026-07"
 
 [auth]
 redirect_urls = [
-  "https://stickycard-pro.vercel.app/auth/callback",
-  "https://stickycard-pro.vercel.app/auth/shopify/callback",
-  "https://stickycard-pro.vercel.app/api/auth/callback"
+  "https://stickycard-pro.sabaiinnovations.com/auth/callback",
+  "https://stickycard-pro.sabaiinnovations.com/auth/shopify/callback",
+  "https://stickycard-pro.sabaiinnovations.com/api/auth/callback"
 ]
 
 [build]
 automatically_update_urls_on_dev = false
 
 [app_proxy]
-url = "https://stickycard-pro.vercel.app/api/storefront"
+url = "https://stickycard-pro.sabaiinnovations.com/api/storefront"
 subpath = "stickycards"
 prefix = "apps"
