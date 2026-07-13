@@ -234,7 +234,8 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           <strong>App Name:</strong> Stickycard Pro<br />
-          <strong>Website:</strong> <a href="https://stickycard-pro.sabaiinnovations.com" target="_blank" rel="noopener noreferrer">https://stickycard-pro.sabaiinnovations.com</a>
+          <strong>Website:</strong> <a href="https://stickycard-pro.sabaiinnovations.com" target="_blank" rel="noopener noreferrer">https://stickycard-pro.sabaiinnovations.com</a><br />
+          <strong>Email:</strong> <a href="mailto:support@sabaiinnovations.com">support@sabaiinnovations.com</a>
         </p>
       </div>
     </div>
